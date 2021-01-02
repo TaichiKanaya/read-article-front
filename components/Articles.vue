@@ -2,9 +2,9 @@
   <v-container fluid>
     <v-row>
       <v-col
-        v-for="card in cards"
-        :key="card.title"
-        :cols="getCols(card)"
+        v-for="article in articles"
+        :key="article.id"
+        :cols="getCols()"
       >
         <v-card height="450px" style="position: relative">
           <v-card-actions style="flex-direction: row-reverse">
@@ -16,79 +16,67 @@
               <v-icon>mdi-heart-outline</v-icon>
             </v-btn>
           </v-card-actions>
-          <NuxtLink class="img-article" :to="'/article/' + card.id">
-            <v-img :src="card.src" class="white--text align-end" height="200px">
-              <v-card-title v-text="card.title" />
+          <NuxtLink class="img-article" :to="'/article/' + article.id">
+            <v-img :src="article.imageUrl" class="white--text align-end" height="200px">
+              <v-card-title v-text="article.title" />
             </v-img>
           </NuxtLink>
-          <v-card-subtitle v-text="card.subtitle" />
-          <v-card-text v-text="card.body" />
+          <v-card-subtitle v-text="article.subtitle" />
+          <v-card-text v-text="article.body" />
         </v-card>
       </v-col>
     </v-row>
+    <v-pagination
+      :value="page"
+      :length="getPageLen"
+      :total-visible="10"
+      circle
+      class="mt-5"
+      @input="transition"
+    />
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import Article from '@/types/article'
 
 export default Vue.extend({
-  components: {},
-  data: () => ({
-    cards: [
-      {
-        id: 1,
-        title: 'タイトル1',
-        subtitle: 'サブタイトル1',
-        body:
-          '本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1本文1',
-        src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        flex: 3
-      },
-      {
-        id: 2,
-        title: 'タイトル2',
-        subtitle: 'サブタイトル2',
-        body: '本文2',
-        src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        flex: 3
-      },
-      {
-        id: 3,
-        title: 'タイトル3',
-        subtitle: 'サブタイトル3',
-        body: '本文3',
-        src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        flex: 3
-      },
-      {
-        id: 4,
-        title: 'タイトル4',
-        subtitle: 'サブタイトル4',
-        body: '本文4',
-        src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        flex: 3
-      },
-      {
-        id: 5,
-        title: 'タイトル5',
-        subtitle: 'サブタイトル5',
-        body: '本文5',
-        src: 'https://cdn.vuetifyjs.com/images/cards/house.jpg',
-        flex: 3
-      }
-    ]
-  }),
+  props: {
+    articles: {
+      type: Array,
+      required: true
+    },
+    page: {
+      type: Number,
+      required: true,
+      default: 1
+    },
+    limit: {
+      type: Number,
+      required: true,
+      default: 10
+    },
+    total: {
+      type: Number,
+      required: true,
+      default: 0
+    }
+  },
   computed: {
-    isXs () {
+    isXs (): Boolean {
       // @ts-ignore
       return this.$vuetify.breakpoint.name === 'xs'
+    },
+    getPageLen (): Number {
+      return (this.total / this.limit <= 1) ? 1 : Math.ceil(this.total / this.limit)
     }
   },
   methods: {
-    getCols (c: Article) {
-      return this.isXs ? '12' : c.flex
+    getCols () {
+      return this.isXs ? 12 : 3
+    },
+    transition (page: Number) {
+      location.href = `/?page=${page}`
     }
   }
 })

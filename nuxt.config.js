@@ -32,7 +32,9 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -46,5 +48,17 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+  },
+
+  axios: {
+    proxy: true
+  },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8080',
+      pathRewrite: {
+        '^/api': ''
+      }
+    }
   }
 }

@@ -12,10 +12,13 @@
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",
+    "@nuxtjs/axios": "^5.12.4",
+    "@nuxtjs/proxy": "^2.1.0",
     "core-js": "^3.6.5",
     "eslint": "^7.16.0",
     "nuxt": "^2.14.6",
-    "oauthio-web": "^0.6.2"
+    "oauthio-web": "^0.6.2",
+    "vue-property-decorator": "^9.1.2"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.6",
